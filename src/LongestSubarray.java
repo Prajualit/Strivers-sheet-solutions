@@ -16,9 +16,22 @@ public class LongestSubarray {
                     break;
                 }
             }
-
         }
         return maxLength;
+    }
+
+    public int subarraySum(int[] nums, int k) {
+        int total = 0;
+        for (int i = 0; i < nums.length; i++) {
+            int currentSum = 0;
+            for (int j = i; j < nums.length; j++) {
+                currentSum += nums[j];
+                if (currentSum == k) {
+                    total++;
+                }
+            }
+        }
+        return total;
     }
 
     public static void main(String[] args) {
