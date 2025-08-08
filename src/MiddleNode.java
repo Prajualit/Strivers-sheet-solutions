@@ -72,7 +72,7 @@ public class MiddleNode {
         return head;
     }
 
-    public ListNode reverseList(ListNode head) {
+    public static ListNode reverseList(ListNode head) {
 
         ListNode prev = null;
         ListNode curr = head;
@@ -132,6 +132,46 @@ public class MiddleNode {
         }
 
         return head;
+    }
+
+    public ListNode reverseKGroup(ListNode head, int k) {
+
+        ListNode node = head;
+
+        ListNode checker = head;
+        for (int i = 0; i < k; i++) {
+            if (checker == null) {
+                return head;
+            }
+            checker = checker.next;
+        }
+
+        for (int i = 0; i < k - 1; i++) {
+            node = node.next;
+        }
+        ListNode separatedNode = node.next;
+        node.next = null;
+        ListNode newHead = reverseList(head);
+        head.next = reverseKGroup(separatedNode, k);
+
+        return newHead;
+    }
+
+    public ListNode rotateRight(ListNode head, int k) {
+
+
+        ListNode newHead = head;
+        ListNode newTail = null;
+
+        while (newHead != null) {
+            newTail = newHead;
+            newHead = newHead.next;
+        }
+
+        newTail.next = null;
+        newHead.next = head;
+
+
     }
 
 
