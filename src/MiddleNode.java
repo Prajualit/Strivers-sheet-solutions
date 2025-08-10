@@ -1,5 +1,3 @@
-import java.util.List;
-
 public class MiddleNode {
 
     public static class ListNode {
@@ -159,20 +157,31 @@ public class MiddleNode {
 
     public ListNode rotateRight(ListNode head, int k) {
 
+        int length = 1;
 
-        ListNode newHead = head;
-        ListNode newTail = null;
-
-        while (newHead != null) {
-            newTail = newHead;
-            newHead = newHead.next;
+        ListNode lastNode = head;
+        while (lastNode.next != null) {
+            lastNode = lastNode.next;
+            length++;
         }
 
+        lastNode.next = head;
+
+        k = k % length;
+        int tailPosition = length - k - 1;
+
+        ListNode newTail = head;
+        for (int i = 0; i < tailPosition; i++) {
+            newTail = newTail.next;
+        }
+
+        ListNode newHead = newTail.next;
         newTail.next = null;
-        newHead.next = head;
 
-
+        return newHead;
     }
+
+
 
 
     public static void main(String[] args) {
