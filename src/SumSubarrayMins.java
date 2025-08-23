@@ -1,43 +1,54 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 public class SumSubarrayMins {
     public static int sumSubarrayMins(int[] arr) {
-
         int MOD = 1_000_000_007;
+        int n = arr.length;
 
-        List<List<Integer>> list = new ArrayList<>();
-        findSubsets(list, new ArrayList<>(), arr, 0);
-        System.out.println(list);
-        list.removeFirst();
-        System.out.println(list);
+        int[] left = new int[n];
+        Stack<Integer> stack = new Stack<>();
 
-        int sum = 0;
-
-        for (int i = 0; i < list.size(); i++) {
-            int minimum = Integer.MAX_VALUE;
-            List<Integer> l = list.get(i);
-            for (int j = 0; j < l.size(); j++) {
-                if (l.get(i) < minimum) {
-                    minimum = l.get(i);
-                }
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
+                stack.pop();
             }
-            sum += minimum;
+            if (stack.isEmpty()) {
+                left[i] = i + 1;
+            } else {
+                left[i] = i - stack.peek();
+            }
+            stack.push(i);
         }
-        return sum % MOD;
-    }
 
-    public static void findSubsets(List<List<Integer>> result, List<Integer> currentSubset, int[] nums, int index) {
-        result.add(new ArrayList<>(currentSubset));
-        for (int i = index; i < nums.length; i++) {
-            currentSubset.add(nums[i]);
-            findSubsets(result, currentSubset, nums, i + 1);
-            currentSubset.removeLast();
+        int[] right = new int[n];
+        stack.clear();
+
+        for (int i = n - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && arr[stack.peek()] > arr[i]) {
+                stack.pop();
+            }
+            if (stack.isEmpty()) {
+                right[i] = n - i;
+            } else {
+                right[i] = stack.peek() - i;
+            }
+            stack.push(i);
         }
+
+        long totalSum = 0;
+        for (int i = 0; i < n; i++) {
+            long contribution = (long) arr[i] * left[i] * right[i];
+            totalSum = (totalSum + contribution) % MOD;
+        }
+
+        return (int) totalSum;
     }
 
     public static void main(String[] args) {
-        int[] arr = {3, 1, 2, 4};
-        System.out.println(sumSubarrayMins(arr));
+        int[] arr1 = {3, 1, 2, 4};
+        System.out.println("Sum for [3, 1, 2, 4]: " + sumSubarrayMins(arr1));
+
+        int[] arr2 = {11, 81, 94, 43, 3};
+        System.out.println("Sum for [11, 81, 94, 43, 3]: " + sumSubarrayMins(arr2));
     }
 }
