@@ -1,4 +1,3 @@
-import javax.lang.model.util.Elements;
 import java.util.*;
 
 public class Trees {
@@ -311,6 +310,136 @@ public class Trees {
             return false;
         }
     }
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        return lowestCommonAncestorHelper(root, p, q);
+    }
+
+    public TreeNode lowestCommonAncestorHelper(TreeNode currentNode, TreeNode p, TreeNode q) {
+
+        if (currentNode == null) return null;
+        if (currentNode == p || currentNode == q) return currentNode;
+
+        TreeNode leftSubtree = lowestCommonAncestorHelper(currentNode.left, p, q);
+        TreeNode rightSubtree = lowestCommonAncestorHelper(currentNode.right, p, q);
+
+        if (leftSubtree != null && rightSubtree != null) return currentNode;
+        else if (leftSubtree == null && rightSubtree != null) return rightSubtree;
+        else if (leftSubtree != null && rightSubtree == null) return leftSubtree;
+        else return null;
+
+    }
+
+    class Pair {
+
+        TreeNode node;
+        int num;
+
+        Pair(TreeNode node, int num) {
+            this.node = node;
+            this.num = num;
+        }
+
+    }
+
+    public int widthOfBinaryTree(TreeNode root) {
+
+        if (root == null) return 0;
+        int result = 0;
+
+        Queue<Pair> queue = new LinkedList<>();
+        queue.offer(new Pair(root, 0));
+
+        while (!queue.isEmpty()) {
+
+            int size = queue.size();
+
+            int min = queue.peek().num;
+            int first = 0, last = 0;
+
+            for (int i = 0; i < size; i++) {
+
+                int currentIndex = queue.peek().num - min;
+                TreeNode node = queue.peek().node;
+
+                queue.poll();
+
+                if (i == 0) first = currentIndex;
+                if (i == size - 1) last = currentIndex;
+
+                if (node.left != null) {
+                    queue.offer(new Pair(node.left, currentIndex * 2 + 1));
+                }
+                if (node.right != null) {
+                    queue.offer(new Pair(node.right, currentIndex * 2 + 2));
+                }
+            }
+            result = Math.max(result, last - first + 1);
+        }
+
+        return result;
+    }
+
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+
+        Map<TreeNode, TreeNode> parentMap = new HashMap<>();
+        findParents(parentMap, root, null);
+
+        Queue<TreeNode> queue = new LinkedList<>();
+
+        Set<TreeNode> visited = new HashSet<>();
+
+        int currentDistance = 0;
+
+        queue.offer(target);
+        visited.add(target);
+
+        while (!queue.isEmpty() && currentDistance < k) {
+            int levelSize = queue.size();
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode currentNode = queue.poll();
+
+                if (currentNode.left != null && !visited.contains(currentNode.left)) {
+                    visited.add(currentNode.left);
+                    queue.offer(currentNode.left);
+                }
+
+                if (currentNode.right != null && !visited.contains(currentNode.right)) {
+                    visited.add(currentNode.right);
+                    queue.offer(currentNode.right);
+                }
+
+                TreeNode parent = parentMap.get(currentNode);
+
+                if (parent != null && !visited.contains(parent)) {
+                    visited.add(parent);
+                    queue.offer(parent);
+                }
+            }
+            currentDistance++;
+        }
+
+        while (!queue.isEmpty()) {
+            result.add(queue.poll().val);
+        }
+
+        return result;
+    }
+
+    private void findParents(Map<TreeNode, TreeNode> parentMap, TreeNode node, TreeNode parent) {
+        if (node == null) {
+            return;
+        }
+        parentMap.put(node, parent);
+        findParents(parentMap, node.left, node);
+        findParents(parentMap, node.right, node);
+    }
+
 
     public static void main(String[] args) {
 
