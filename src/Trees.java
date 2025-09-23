@@ -440,6 +440,103 @@ public class Trees {
         findParents(parentMap, node.right, node);
     }
 
+    public int countNodes(TreeNode root) {
+        return countHelper(root);
+    }
+
+    public int countHelper(TreeNode root) {
+        if (root == null) return 0;
+
+        int leftHeight = maxDepth(root.left);
+        int rightHeight = maxDepth(root.right);
+
+        if (leftHeight == rightHeight) return (1 << leftHeight) - 1;
+        else {
+            return 1 + countHelper(root.left) + countHelper(root.right);
+        }
+
+    }
+
+    private Map<Integer, Integer> inorderMap;
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null || inorder == null || preorder.length == 0 || inorder.length == 0) {
+            return null;
+        }
+
+        inorderMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inorderMap.put(inorder[i], i);
+        }
+
+        return treeMaker(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
+    }
+
+    public TreeNode treeMaker(int[] preOrder, int preStart, int preEnd, int[] inOrder, int inStart, int inEnd) {
+        if (preStart > preEnd || inStart > inEnd) {
+            return null;
+        }
+        int rootVal = preOrder[preStart];
+        TreeNode root = new TreeNode(rootVal);
+        int inRootIndex = inorderMap.get(rootVal);
+        int leftSubTreeSize = inRootIndex - inStart;
+
+        root.left = treeMaker(preOrder, preStart + 1, leftSubTreeSize + preStart, inOrder, inStart, inRootIndex - 1);
+        root.right = treeMaker(preOrder, preStart + leftSubTreeSize + 1, preEnd, inOrder, inRootIndex + 1, inEnd);
+
+        return root;
+    }
+
+    public TreeNode treeMakerPost(int[] postorder, int postStart, int postEnd, int[] inOrder, int inStart, int inEnd) {
+        if (postStart > postEnd || inStart > inEnd) {
+            return null;
+        }
+        int rootVal = postorder[postEnd];
+        TreeNode root = new TreeNode(rootVal);
+        int inRootIndex = inorderMap.get(rootVal);
+        int leftSubTreeSize = inRootIndex - inStart;
+        int rightSubTreeSize = inEnd - inRootIndex;
+
+        root.right = treeMaker(postorder, postEnd - rightSubTreeSize, postEnd - 1, inOrder, inRootIndex + 1, inEnd);
+        root.left = treeMaker(postorder, postStart, postStart + leftSubTreeSize - 1, inOrder, inStart, inRootIndex - 1);
+
+        return root;
+    }
+
+    public TreeNode buildTreePost(int[] inorder, int[] postorder) {
+        if (postorder == null || inorder == null || postorder.length == 0 || inorder.length == 0) {
+            return null;
+        }
+
+        int[] preorder = new int[postorder.length];
+        for (int i = 0; i < postorder.length - 1; i++) {
+            preorder[preorder.length - i - 1] = postorder[i];
+        }
+        inorderMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inorderMap.put(inorder[i], i);
+        }
+
+        return treeMaker(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
+    }
+
+    public TreeNode prev = null;
+
+    public void flatten(TreeNode root) {
+        flattenHelper(root);
+    }
+
+    public void flattenHelper(TreeNode root) {
+        if (root == null) return;
+
+        flattenHelper(root.right);
+        flattenHelper(root.left);
+        root.right = prev;
+        root.left = null;
+        prev = root;
+
+    }
+
 
     public static void main(String[] args) {
 
