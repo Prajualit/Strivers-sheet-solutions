@@ -472,6 +472,92 @@ public class Streaks {
         return dp[n - 1];
     }
 
+
+    // public List<String> removeAnagrams(String[] words) {
+
+    //     List<String> result = new ArrayList<>();
+
+    //     for (int i = 1; i < words.length; i++) {
+    //         if (isNotAnagram(words, i)) {
+    //             result.add(words[i]);
+    //         }
+    //     }
+
+    //     return result;
+    // }
+
+    // public boolean isNotAnagram(String[] words, int i) {
+
+
+    // }
+
+
+    public boolean canBeIncreasing(int[] nums, int k) {
+        int n = nums.length;
+
+        if (n < 2 * k) return false;
+
+        for (int a = 0; a <= n - 2 * k; a++) {
+            boolean firstIsIncreasing = isStrictlyIncreasing(nums, a, k);
+            if (firstIsIncreasing) {
+                boolean secondIsIncreasing = isStrictlyIncreasing(nums, a + k, k);
+                if (secondIsIncreasing) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isStrictlyIncreasing(int[] nums, int start, int length) {
+        if (length <= 1) {
+            return true;
+        }
+
+        for (int i = start; i < start + length - 1; i++) {
+            if (nums[i] >= nums[i + 1]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static int numberOfBeams(String[] bank) {
+
+        int totalBeams = 0;
+
+        int[] devices = new int[bank.length];
+
+        for (int i = 0; i < bank.length; i++) {
+            int currentDevices = 0;
+            for (int j = 0; j < bank[i].length(); j++) {
+                currentDevices += Integer.parseInt(String.valueOf(bank[i].charAt(j)));
+            }
+            devices[i] = currentDevices;
+        }
+
+        int p1 = 0;
+        int p2;
+
+        for (p2 = 1; p2 < devices.length; p2++) {
+            while (p1 < p2) {
+                if (devices[p1] == 0){
+                    p1++;
+                    continue;
+                }
+                if (devices[p2] == 0) {
+                    break;
+                }
+                totalBeams += devices[p1] * devices[p2];
+                p1++;
+            }
+        }
+
+        return totalBeams;
+    }
+
     public static void main(String[] args) {
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
@@ -480,6 +566,26 @@ public class Streaks {
 //        System.out.println(triangleNumber(nums1));
 
 //        System.out.println(maxBottlesDrunk(10, 3));
+//
+        //    List<Integer> nums = new ArrayList<>();
+        //    nums.add(2);
+        //    nums.add(5);
+        //    nums.add(7);
+        //    nums.add(8);
+        //    nums.add(9);
+        //    nums.add(2);
+        //    nums.add(3);
+        //    nums.add(4);
+        //    nums.add(3);
+        //    nums.add(1);
+
+        //    System.out.println(hasIncreasingSubarrays(nums, 3));
+
+
+        String[] bank = {"011001", "000000", "010100", "001000"};
+
+        System.out.println(numberOfBeams(bank));
+
     }
 
 }
