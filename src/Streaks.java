@@ -543,7 +543,7 @@ public class Streaks {
 
         for (p2 = 1; p2 < devices.length; p2++) {
             while (p1 < p2) {
-                if (devices[p1] == 0){
+                if (devices[p1] == 0) {
                     p1++;
                     continue;
                 }
@@ -556,6 +556,40 @@ public class Streaks {
         }
 
         return totalBeams;
+    }
+
+    public String countAndSay(int n) {
+
+        StringBuilder result = new StringBuilder("1");
+
+        int currentNumber = 1;
+
+        while (currentNumber < n) {
+            result = rleGenerator(result);
+            currentNumber++;
+        }
+
+        return result.toString();
+
+    }
+
+    public StringBuilder rleGenerator(StringBuilder s) {
+
+        StringBuilder newString = new StringBuilder();
+
+        int count = 1;
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i - 1) == s.charAt(i)) {
+                count++;
+            } else {
+                newString.append(count).append(s.charAt(i - 1));
+                count = 1;
+            }
+        }
+
+        newString.append(count).append(s.charAt(s.length() - 1));
+
+        return newString;
     }
 
     public static void main(String[] args) {
