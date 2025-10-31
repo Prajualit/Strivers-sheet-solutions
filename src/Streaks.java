@@ -592,6 +592,64 @@ public class Streaks {
         return newString;
     }
 
+    public int repeatedStringMatch(String a, String b) {
+        int count = 0;
+        StringBuilder string = new StringBuilder();
+
+        while (string.length() < b.length()) {
+            string.append(a);
+            count++;
+        }
+
+        if (string.indexOf(b) != -1) return count;
+
+        string.append(a);
+        count++;
+
+        if (string.indexOf(b) != -1) return count;
+
+        return -1;
+    }
+
+    public static String shortestPalindrome(String s) {
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < s.length(); i++) {
+            StringBuilder newString = new StringBuilder();
+            if (s.charAt(i) != s.charAt(s.length() - 1 - i)) {
+                newString.append(s.charAt(i)).append(s);
+                sb = newString;
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public static int[] getSneakyNumbers(int[] nums) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+        }
+        System.out.println(map);
+
+        List<Integer> list = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> e : map.entrySet()) {
+            if (e.getValue() > 1) {
+                list.add(e.getKey());
+            }
+        }
+
+        int[] result = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
@@ -601,24 +659,35 @@ public class Streaks {
 
 //        System.out.println(maxBottlesDrunk(10, 3));
 //
-        //    List<Integer> nums = new ArrayList<>();
-        //    nums.add(2);
-        //    nums.add(5);
-        //    nums.add(7);
-        //    nums.add(8);
-        //    nums.add(9);
-        //    nums.add(2);
-        //    nums.add(3);
-        //    nums.add(4);
-        //    nums.add(3);
-        //    nums.add(1);
+//            List<Integer> nums = new ArrayList<>();
+//            nums.add(2);
+//            nums.add(5);
+//            nums.add(7);
+//            nums.add(8);
+//            nums.add(9);
+//            nums.add(2);
+//            nums.add(3);
+//            nums.add(4);
+//            nums.add(3);
+//            nums.add(1);
+//
+//            System.out.println(hasIncreasingSubarrays(nums, 3));
+//
+//
+//        String[] bank = {"011001", "000000", "010100", "001000"};
+//
+//        System.out.println(numberOfBeams(bank));
+//
+//
+//        System.out.println(shortestPalindrome("abcd"));
 
-        //    System.out.println(hasIncreasingSubarrays(nums, 3));
+        int[] nums = {0, 1, 1, 0};
 
+        int[] result = getSneakyNumbers(nums);
 
-        String[] bank = {"011001", "000000", "010100", "001000"};
-
-        System.out.println(numberOfBeams(bank));
+        for (int j : result) {
+            System.out.print(j + " ");
+        }
 
     }
 
