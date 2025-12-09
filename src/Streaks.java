@@ -650,6 +650,58 @@ public class Streaks {
         return result;
     }
 
+    public int countTriples(int n) {
+
+        int total = 0;
+
+        for (int i = 1; i <= n; i++) {
+            int i_sq = i * i;
+            for (int j = 1; j <= n; j++) {
+                int j_sq = j * j;
+                int a_sq = i_sq + j_sq;
+
+                int a = (int) Math.sqrt(a_sq);
+
+                if (a * a == a_sq && a <= n) {
+                    total++;
+                }
+            }
+        }
+
+        return total;
+    }
+
+    public int specialTriplets(int[] nums) {
+
+        int MOD = 1_000_000_007;
+
+        Map<Integer, Long> suffixCount = new HashMap<>();
+        Map<Integer, Long> prefixCount = new HashMap<>();
+
+        for (int x : nums) {
+            suffixCount.put(x, suffixCount.getOrDefault(x, 0L) + 1);
+        }
+        
+        long totalTriplets = 0;
+
+        for (int currentNum : nums) {
+
+            suffixCount.put(currentNum, suffixCount.get(currentNum) - 1);
+
+            int targetValue = currentNum * 2;
+
+            long countI = prefixCount.getOrDefault(targetValue, 0L);
+            long countK = suffixCount.getOrDefault(targetValue, 0L);
+
+            long tripletsforJ = (countI * countK) % MOD;
+            totalTriplets = (totalTriplets + tripletsforJ) % MOD;
+
+            prefixCount.put(currentNum, prefixCount.getOrDefault(currentNum, 0L) + 1);
+        }
+
+        return (int) totalTriplets;
+    }
+
     public static void main(String[] args) {
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
