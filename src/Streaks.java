@@ -681,7 +681,7 @@ public class Streaks {
         for (int x : nums) {
             suffixCount.put(x, suffixCount.getOrDefault(x, 0L) + 1);
         }
-        
+
         long totalTriplets = 0;
 
         for (int currentNum : nums) {
@@ -719,6 +719,84 @@ public class Streaks {
         }
 
         return totalPermutations;
+    }
+
+    public int countCoveredBuildings(int n, int[][] buildings) {
+
+        Set<Integer> buildingData = new HashSet<>();
+
+        for (int[] b : buildings) {
+            int x = b[0];
+            int y = b[1];
+
+            buildingData.add(x * n + y);
+        }
+
+        int totalBuildingsCovered = 0;
+
+        for (int[] b : buildings) {
+
+            int x = b[0];
+            int y = b[1];
+
+            boolean hasBelow = buildingData.contains((x - 1) * n + y);
+            boolean hasAbove = buildingData.contains((x + 1) * n + y);
+            boolean hasLeft = buildingData.contains(x * n + y - 1);
+            boolean hasRight = buildingData.contains(x * n + y + 1);
+
+            if (hasLeft && hasAbove && hasBelow && hasRight) {
+                totalBuildingsCovered++;
+            }
+        }
+
+        return totalBuildingsCovered;
+    }
+
+    public int[] countMentions(int numberOfUsers, List<List<String>> events) {
+
+        int[] offlineUsers = new int[numberOfUsers];
+        int[] onlineTime = new int[numberOfUsers];
+
+        int[] mentions = new int[numberOfUsers];
+
+        for (int i = 0; i < events.size(); i++) {
+
+            List<String> e = events.get(i);
+
+            if (Objects.equals(e.getFirst(), "MESSAGE")) {
+
+                for (int j = 0; j < offlineUsers.length; j++) {
+                    if (Integer.parseInt(e.get(1)) >= onlineTime[j]) {
+                        offlineUsers[j] = 0;
+                    }
+                }
+
+                if (Objects.equals(e.getLast(), "ALL")) {
+                    for (int j = 0; j < mentions.length; j++) {
+                        mentions[j] += 1;
+                    }
+                } else if (Objects.equals(e.getLast(), "HERE")) {
+                    for (int j = 0; j < mentions.length; j++) {
+                        if (offlineUsers[j] == 0) {
+                            mentions[j] += 1;
+                        }
+                    }
+                } else {
+                    String[] users = e.getLast().split(" ");
+                    for (String user : users) {
+                        int index = Integer.parseInt(user.substring(2));
+                        mentions[index] += 1;
+                    }
+                }
+
+            } else {
+                offlineUsers[Integer.parseInt(e.getLast())] = 1;
+                onlineTime[Integer.parseInt(e.getLast())] = Integer.parseInt(e.get(1)) + 60;
+            }
+
+        }
+
+        return mentions;
     }
 
     public static void main(String[] args) {
