@@ -799,6 +799,89 @@ public class Streaks {
         return mentions;
     }
 
+    public class Coupon {
+        String code;
+        String businessLine;
+        int priority;
+
+        Coupon(String code, String businessLine, int priority) {
+            this.code = code;
+            this.businessLine = businessLine;
+            this.priority = priority;
+        }
+    }
+
+    public int getPriority(String businessLine) {
+        return switch (businessLine) {
+            case "electronics" -> 0;
+            case "grocery" -> 1;
+            case "pharmacy" -> 2;
+            case "restaurant" -> 3;
+            default -> -1;
+        };
+    }
+
+    public List<String> validateCoupons(String[] code, String[] businessLine, boolean[] isActive) {
+
+        int n = code.length;
+        List<Coupon> validCoupon = new ArrayList<>();
+
+        Map<String, Integer> priorityMap = new HashMap<>();
+        priorityMap.put("electronics", 0);
+        priorityMap.put("grocery", 1);
+        priorityMap.put("pharmacy", 2);
+        priorityMap.put("restaurant", 2);
+
+        for (int i = 0; i < n; i++) {
+            if (code[i].matches("\\w+") && priorityMap.containsKey(businessLine[i]) && isActive[i]) {
+
+                int priority = getPriority(businessLine[i]);
+                if (priority == -1) continue;
+
+                validCoupon.add(new Coupon(code[i], businessLine[i], priority));
+            }
+        }
+
+        validCoupon.sort((a, b) -> {
+            if (a.priority != b.priority) {
+                return Integer.compare(a.priority, b.priority);
+            }
+            return a.code.compareTo(b.code);
+        });
+
+        List<String> result = new ArrayList<>();
+        for (Coupon coupon : validCoupon) {
+            result.add(coupon.code);
+        }
+
+        return result;
+    }
+
+    public int numberOfWays(String corridor) {
+
+        long MOD = 1_000_000_007;
+
+        List<Integer> indexOfSeat = new ArrayList<>();
+
+        for (int i = 0; i < corridor.length(); i++) {
+            if (corridor.charAt(i) == 'S')
+                indexOfSeat.add(i);
+        }
+        int n = indexOfSeat.size();
+
+        if (indexOfSeat.isEmpty() || n % 2 != 0)
+            return 0;
+
+        long totalWays = 1;
+
+        for (int i = 2; i < n; i += 2) {
+            totalWays *= (indexOfSeat.get(i) - indexOfSeat.get(i - 1));
+            totalWays %= MOD;
+        }
+
+        return (int) totalWays;
+    }
+
     public static void main(String[] args) {
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
