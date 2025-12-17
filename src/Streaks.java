@@ -888,7 +888,7 @@ public class Streaks {
         long consecutiveNumbers = 1;
 
         for (int i = 1; i < prices.length; i++) {
-            if (prices[i] == prices[i - 1] - 1){
+            if (prices[i] == prices[i - 1] - 1) {
                 consecutiveNumbers++;
             } else {
                 consecutiveNumbers = 1;
@@ -897,6 +897,49 @@ public class Streaks {
         }
 
         return result;
+    }
+
+    //        Character[] transactionType = new Character[]{'n', 's'};
+    public long maximumProfit(int[] prices, int k) {
+
+        if (prices == null || prices.length < 2 || k == 0) {
+            return 0;
+        }
+
+        int n = prices.length;
+        long[] empty = new long[k + 1];
+        long[] holdLong = new long[k + 1];
+        long[] holdShort = new long[k + 1];
+
+        for (int i = 0; i <= k; i++) {
+            holdLong[i] = Long.MIN_VALUE / 2;
+            holdShort[i] = Long.MIN_VALUE / 2;
+        }
+
+        for (int price : prices) {
+
+            long[] nextEmpty = new long[k + 1];
+            long[] nextHoldLong = new long[k + 1];
+            long[] nextHoldShort = new long[k + 1];
+
+            System.arraycopy(empty, 0, nextEmpty, 0, k + 1);
+            System.arraycopy(holdLong, 0, nextHoldLong, 0, k + 1);
+            System.arraycopy(holdShort, 0, nextHoldShort, 0, k + 1);
+
+            for (int i = 1; i <= k; i++) {
+
+                nextHoldLong[i] = Math.max(holdLong[i], empty[i - 1] - price);
+                nextHoldShort[i] = Math.max(holdShort[i], empty[i - 1] + price);
+
+                nextEmpty[i] = Math.max(nextEmpty[i], holdLong[i] + price);
+                nextEmpty[i] = Math.max(nextEmpty[i], holdShort[i] - price);
+            }
+            empty = nextEmpty;
+            holdLong = nextHoldLong;
+            holdShort = nextHoldShort;
+        }
+
+        return empty[k];
     }
 
     public static void main(String[] args) {
