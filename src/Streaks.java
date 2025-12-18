@@ -942,6 +942,37 @@ public class Streaks {
         return empty[k];
     }
 
+
+    public long maxProfit(int[] prices, int[] strategy, int k) {
+        int n = prices.length;
+        int half = k / 2;
+
+        long[] prefOriginal = new long[n + 1];
+        long[] prefPrices = new long[n + 1];
+
+        for (int i = 0; i < n; i++) {
+            prefOriginal[i + 1] = prefOriginal[i] + (long) strategy[i] * prices[i];
+            prefPrices[i + 1] = prefPrices[i] + (long) prices[i];
+        }
+
+        long maxTotalProfit = prefOriginal[n];
+
+        for (int i = 0; i <= n - k; i++) {
+            long beforeWindow = prefOriginal[i];
+
+            int secondHalfStart = i + half;
+            int secondHalfEnd = i + k;
+            long windowSecondHalf = prefPrices[secondHalfEnd] - prefPrices[secondHalfStart];
+
+            long afterWindow = prefOriginal[n] - prefOriginal[i + k];
+
+            long currentTotal = beforeWindow + windowSecondHalf + afterWindow;
+            maxTotalProfit = Math.max(maxTotalProfit, currentTotal);
+        }
+
+        return maxTotalProfit;
+    }
+
     public static void main(String[] args) {
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
