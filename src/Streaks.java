@@ -973,6 +973,23 @@ public class Streaks {
         return maxTotalProfit;
     }
 
+    public int minDeletionSize(String[] strs) {
+
+        int totalDeletions = 0;
+
+
+        for (int column = 0; column < strs[0].length(); column++) {
+            for (int i = 1; i < strs.length; i++) {
+                if (strs[i].charAt(column) < strs[i - 1].charAt(column)) {
+                    totalDeletions++;
+                    break;
+                }
+            }
+        }
+
+        return totalDeletions;
+    }
+
     public static void main(String[] args) {
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
