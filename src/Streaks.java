@@ -973,7 +973,7 @@ public class Streaks {
         return maxTotalProfit;
     }
 
-    public int minDeletionSize(String[] strs) {
+    public int minDeletionSize1(String[] strs) {
 
         int totalDeletions = 0;
 
@@ -983,6 +983,35 @@ public class Streaks {
                 if (strs[i].charAt(column) < strs[i - 1].charAt(column)) {
                     totalDeletions++;
                     break;
+                }
+            }
+        }
+
+        return totalDeletions;
+    }
+
+    public int minDeletionSize(String[] strs) {
+
+        int totalDeletions = 0;
+        int m = strs[0].length();
+        int n = strs.length;
+
+        boolean[] isSorted = new boolean[n - 1];
+
+        for (int i = 0; i < m; i++) {
+            int j = 0;
+            for (j = 0; j < n - 1; j++) {
+                if (!isSorted[j] && strs[j].charAt(i) > strs[j + 1].charAt(i)) {
+                    totalDeletions++;
+                    break;
+                }
+            }
+
+            if (j == n - 1) {
+                for (int k = 0; k < n - 1; k++) {
+                    if (strs[k].charAt(i) < strs[k + 1].charAt(i)) {
+                        isSorted[k] = true;
+                    }
                 }
             }
         }
