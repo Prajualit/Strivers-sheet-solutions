@@ -990,7 +990,7 @@ public class Streaks {
         return totalDeletions;
     }
 
-    public int minDeletionSize(String[] strs) {
+    public int minDeletionSize2(String[] strs) {
 
         int totalDeletions = 0;
         int m = strs[0].length();
@@ -1017,6 +1017,36 @@ public class Streaks {
         }
 
         return totalDeletions;
+    }
+
+    public int minDeletionSize(String[] strs) {
+        int m = strs[0].length();
+
+        int maxKeep = 0;
+        int[] dp = new int[m];
+
+        for (int i = 0; i < m; i++) {
+            dp[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (canAppend(strs, j, i)) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+            maxKeep = Math.max(maxKeep, dp[i]);
+        }
+
+        return m - maxKeep;
+    }
+
+    private boolean canAppend(String[] strs, int j, int i) {
+
+        for (String s : strs) {
+            if (s.charAt(j) > s.charAt(i)) {
+                return false;
+            }
+        }
+        return true;
+
     }
 
     public static void main(String[] args) {
