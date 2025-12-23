@@ -1049,6 +1049,58 @@ public class Streaks {
 
     }
 
+    public int maxTwoEvents(int[][] events) {
+
+        Arrays.sort(events, (a, b) -> {
+            return Integer.compare(a[0], b[0]);
+        });
+
+        int n = events.length;
+
+        int maxValueSum = 0;
+
+        int[] suffixMax = new int[n];
+        suffixMax[n - 1] = events[n - 1][2];
+        for (int i = n - 2; i >= 0; i--) {
+            suffixMax[i] = Math.max(suffixMax[i + 1], events[i][2]);
+        }
+
+        for (int i = 0; i < events.length; i++) {
+
+            maxValueSum = Math.max(maxValueSum, events[i][2]);
+
+            int nextEventIndex = findNext(events, i);
+
+            if (nextEventIndex != -1) {
+                maxValueSum = Math.max(maxValueSum, events[i][2] + suffixMax[nextEventIndex]);
+            }
+        }
+
+        return maxValueSum;
+    }
+
+    public int findNext(int[][] events, int i) {
+
+        int start = i + 1;
+        int end = events.length - 1;
+
+        int res = -1;
+
+        while (start <= end) {
+
+            int mid = start + (end - start) / 2;
+
+            if (events[mid][0] > events[i][1]) {
+                res = mid;
+                end = mid - 1;
+            } else {
+                start = mid + 1;
+            }
+        }
+
+        return res;
+    }
+
     public static void main(String[] args) {
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
@@ -1080,12 +1132,22 @@ public class Streaks {
 //
 //        System.out.println(shortestPalindrome("abcd"));
 
-        int[] nums = {0, 1, 1, 0};
+//        int[] nums = {0, 1, 1, 0};
+//
+//        int[] result = getSneakyNumbers(nums);
+//
+//        for (int j : result) {
+//            System.out.print(j + " ");
+//        }
 
-        int[] result = getSneakyNumbers(nums);
+        int[][] events = {{1, 3, 2}, {4, 5, 2}, {2, 4, 3}};
 
-        for (int j : result) {
-            System.out.print(j + " ");
+
+        for (int i = 0; i < events.length; i++) {
+            for (int j = 0; j < events.length; j++) {
+                System.out.print(events[i][j] + " ");
+            }
+            System.out.println();
         }
 
     }
