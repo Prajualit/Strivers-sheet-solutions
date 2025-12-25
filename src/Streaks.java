@@ -1101,6 +1101,43 @@ public class Streaks {
         return res;
     }
 
+    public static int minimumBoxes(int[] apple, int[] capacity) {
+
+        long totalApples = 0;
+        for (int a : apple) {
+            totalApples += a;
+        }
+
+        Arrays.sort(capacity);
+        int boxesUsed = 0;
+
+        for (int i = capacity.length - 1; i >= 0; i--) {
+
+            totalApples -= capacity[i];
+            boxesUsed++;
+
+            if (totalApples <= 0) {
+                break;
+            }
+        }
+        return boxesUsed;
+    }
+
+    public long maximumHappinessSum(int[] happiness, int k) {
+
+        Arrays.sort(happiness);
+        long maxHappiness = 0;
+        int n = happiness.length;
+
+        for (int i = 0; i < k; i++) {
+            int originalValue = happiness[n - 1 - i];
+            int currentValue = Math.max(0, originalValue - i);
+            maxHappiness += currentValue;
+        }
+
+        return maxHappiness;
+    }
+
     public static void main(String[] args) {
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
@@ -1140,15 +1177,17 @@ public class Streaks {
 //            System.out.print(j + " ");
 //        }
 
-        int[][] events = {{1, 3, 2}, {4, 5, 2}, {2, 4, 3}};
+//        int[][] events = {{1, 3, 2}, {4, 5, 2}, {2, 4, 3}};
+//
+//
+//        for (int i = 0; i < events.length; i++) {
+//            for (int j = 0; j < events.length; j++) {
+//                System.out.print(events[i][j] + " ");
+//            }
+//            System.out.println();
+//        }
 
-
-        for (int i = 0; i < events.length; i++) {
-            for (int j = 0; j < events.length; j++) {
-                System.out.print(events[i][j] + " ");
-            }
-            System.out.println();
-        }
+        System.out.println(minimumBoxes(new int[]{1, 3, 2}, new int[]{4, 3, 1, 5, 2}));
 
     }
 
