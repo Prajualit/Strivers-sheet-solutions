@@ -1138,6 +1138,72 @@ public class Streaks {
         return maxHappiness;
     }
 
+    public int bestClosingTime(String customers) {
+        int n = customers.length();
+
+        int currentPenalty = 0;
+        int minPenalty = 0;
+        int earliestHour = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (customers.charAt(i) == 'Y') {
+                currentPenalty--;
+            } else {
+                currentPenalty++;
+            }
+            if (currentPenalty < minPenalty) {
+                minPenalty = currentPenalty;
+                earliestHour = i + 1;
+            }
+        }
+        return earliestHour;
+    }
+
+    public int mostBooked(int n, int[][] meetings) {
+        Arrays.sort(meetings, (a, b) -> Integer.compare(a[0], b[0]));
+
+        PriorityQueue<Integer> freeRooms = new PriorityQueue<>();
+        for (int i = 0; i < n; i++) freeRooms.add(i);
+
+        PriorityQueue<int[]> busyRooms = new PriorityQueue<>((a, b) -> a[0] != b[0] ? Integer.compare(a[0], b[0]) : Integer.compare(a[1], b[1]));
+
+        int[] bookingCount = new int[n];
+
+        for (int[] meeting : meetings) {
+
+            int start = meeting[0];
+            int end = meeting[1];
+
+            while (!busyRooms.isEmpty() && busyRooms.peek()[0] <= start) {
+                freeRooms.add(busyRooms.poll()[1]);
+            }
+
+            if (!freeRooms.isEmpty()) {
+                int room = freeRooms.poll();
+                bookingCount[room]++;
+                busyRooms.add(new int[]{end, room});
+            } else {
+                int[] earliestRoom = busyRooms.poll();
+                int availableAt = earliestRoom[0];
+                int room = earliestRoom[1];
+                bookingCount[room]++;
+
+                int newEnd = availableAt + (end - start);
+                busyRooms.add(new int[]{newEnd, room});
+            }
+
+        }
+
+        int maxIndex = 0;
+        for (int i = 0; i < n; i++) {
+            if (bookingCount[i] > bookingCount[maxIndex]) {
+                maxIndex = i;
+            }
+        }
+
+        return maxIndex;
+    }
+
     public static void main(String[] args) {
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
@@ -1187,7 +1253,7 @@ public class Streaks {
 //            System.out.println();
 //        }
 
-        System.out.println(minimumBoxes(new int[]{1, 3, 2}, new int[]{4, 3, 1, 5, 2}));
+//        System.out.println(minimumBoxes(new int[]{1, 3, 2}, new int[]{4, 3, 1, 5, 2}));
 
     }
 
