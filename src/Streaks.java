@@ -1204,6 +1204,55 @@ public class Streaks {
         return maxIndex;
     }
 
+    public int countNegatives(int[][] grid) {
+
+        int totalNegatives = 0;
+        int n = grid[0].length;
+
+        for (int[] ints : grid) {
+            for (int j = 0; j < n; j++) {
+                if (ints[j] < 0) {
+                    totalNegatives += n - j;
+                    break;
+                }
+            }
+        }
+
+        return totalNegatives;
+    }
+
+    public boolean pyramidTransition(String bottom, List<String> allowed) {
+
+        Map<String, List<Character>> map = new HashMap<>();
+        for (String s : allowed) {
+            String key = s.substring(0, 2);
+            map.computeIfAbsent(key, k -> new ArrayList<>()).add(s.charAt(2));
+        }
+
+        return solve(bottom, "", map);
+
+    }
+
+    public boolean solve(String current, String nextRow, Map<String, List<Character>> map) {
+
+        if (current.length() == 1) return true;
+
+        if (nextRow.length() == current.length() - 1) {
+            return solve(nextRow, "", map);
+        }
+
+        int i = nextRow.length();
+        String key = current.substring(i, i + 2);
+
+        if (map.containsKey(key)) {
+            for (char c : map.get(key)) {
+                if (solve(current, nextRow + c, map)) return true;
+            }
+        }
+
+        return false;
+    }
+
     public static void main(String[] args) {
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
