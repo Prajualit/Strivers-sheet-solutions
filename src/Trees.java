@@ -21,6 +21,29 @@ public class Trees {
         }
     }
 
+    public TreeNode searchBST(TreeNode root, int val) {
+
+        if (root == null) return null;
+        if (root.val == val) return root;
+
+        return root.val > val ? searchBST(root.left, val) : searchBST(root.right, val);
+    }
+
+    public TreeNode insertIntoBST(TreeNode root, int val) {
+
+        if (root == null) {
+            return new TreeNode(val);
+        }
+
+        if (root.val > val) {
+            root.left = insertIntoBST(root.left, val);
+        } else {
+            root.right = insertIntoBST(root.right, val);
+        }
+
+        return root;
+    }
+
     public List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         if (root == null) {
