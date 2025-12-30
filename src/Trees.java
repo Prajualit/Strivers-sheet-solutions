@@ -44,6 +44,27 @@ public class Trees {
         return root;
     }
 
+    public int kthSmallest(TreeNode root, int k) {
+
+        List<Integer> list = new ArrayList<>();
+
+
+        fillList(list, root);
+
+        list.sort(Integer::compare);
+
+        return list.get(k - 1);
+    }
+
+    public void fillList(List<Integer> list, TreeNode root) {
+
+        if (root == null) return;
+
+        list.add(root.val);
+        fillList(list, root.left);
+        fillList(list, root.right);
+    }
+
     public List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         if (root == null) {

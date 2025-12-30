@@ -1253,6 +1253,46 @@ public class Streaks {
         return false;
     }
 
+    public int numMagicSquaresInside(int[][] grid) {
+
+        int n = grid.length;
+        int m = grid[0].length;
+        int totalMagicSquares = 0;
+
+        for (int i = 0; i <= n - 3; i++) {
+            for (int j = 0; j <= m - 3; j++) {
+                if (isMagicSquare(grid, i, j)) totalMagicSquares++;
+            }
+        }
+
+        return totalMagicSquares;
+    }
+
+    public boolean isMagicSquare(int[][] grid, int row, int col) {
+
+        int sum = grid[row][col] + grid[row][col + 1] + grid[row][col + 2];
+
+        HashSet<Integer> set = new HashSet<>();
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int num = grid[row + i][col + j];
+                if (num < 1 || num > 9 || set.contains(num)) return false;
+                set.add(num);
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            if (grid[row][col + i] + grid[row + 1][col + i] + grid[row + 2][col + i] != sum) return false;
+            if (grid[row + i][col] + grid[row + i][col + 1] + grid[row + i][col + 2] != sum) return false;
+        }
+
+        if (grid[row][col] + grid[row + 1][col + 1] + grid[row + 2][col + 2] != sum) return false;
+        if (grid[row][col + 2] + grid[row + 1][col + 1] + grid[row + 2][col] != sum) return false;
+
+        return true;
+    }
+
     public static void main(String[] args) {
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
