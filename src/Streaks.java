@@ -1293,7 +1293,87 @@ public class Streaks {
         return true;
     }
 
+    public int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+    public int latestDayToCross(int row, int col, int[][] cells) {
+
+        int left = 1;
+        int right = cells.length;
+        int lastDay = 0;
+
+        while (left <= right) {
+
+            int mid = left + (right - left) / 2;
+
+            if (canWalk(row, col, mid, cells)) {
+                lastDay = mid;
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        return lastDay;
+    }
+
+    public boolean canWalk(int row, int col, int mid, int[][] cells) {
+
+        int[][] grid = new int[row][col];
+        for (int i = 0; i < mid; i++) {
+            grid[cells[i][0] - 1][cells[i][1] - 1] = 1;
+        }
+
+        Queue<int[]> queue = new LinkedList<>();
+        for (int i = 0; i < col; i++) {
+            if (grid[0][i] == 0) {
+                queue.offer(new int[]{0, i});
+                grid[0][i] = 1;
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int r = current[0];
+            int c = current[1];
+
+            if (r == row - 1) return true;
+
+            for (int[] dir : directions) {
+                int nr = r + dir[0];
+                int nc = c + dir[1];
+
+                if (nr >= 0 && nr < row && nc >= 0 && nc < col && grid[nr][nc] == 0) {
+                    grid[nr][nc] = 1;
+                    queue.offer(new int[]{nr, nc});
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static int[] plusOne(int[] digits) {
+
+        int n = digits.length;
+
+        for (int i = n - 1; i >= 0; i--) {
+            if (digits[i] < 9) {
+                digits[i]++;
+                return digits;
+            }
+
+            digits[i] = 0;
+        }
+
+        int[] result = new int[n + 1];
+        result[0] = 1;
+        return result;
+    }
+
     public static void main(String[] args) {
+
+        System.out.println(Arrays.toString(plusOne(new int[]{1, 2, 3})));
+
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
 //        int[] nums1 = {4, 2, 3, 4}; // 4

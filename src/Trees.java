@@ -65,6 +65,24 @@ public class Trees {
         fillList(list, root.right);
     }
 
+    TreeNode previous;
+
+    public boolean isValidBST(TreeNode root) {
+
+        if (root == null) {
+            return true;
+        }
+
+        if (!isValidBST(root.left)) return false;
+
+        if (previous != null && previous.val >= root.val) return false;
+        previous = root;
+
+        if (!isValidBST(root.right)) return false;
+
+        return true;
+    }
+
     public List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         if (root == null) {
