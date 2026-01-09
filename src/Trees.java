@@ -21,6 +21,80 @@ public class Trees {
         }
     }
 
+    public class subtreeWithAllDeepestClass {
+
+        int height;
+        TreeNode node;
+
+        subtreeWithAllDeepestClass(int height, TreeNode node) {
+            this.height = height;
+            this.node = node;
+        }
+
+    }
+
+    public TreeNode subtreeWithAllDeepest(TreeNode root) {
+        return subtreeWithAllDeepestHelper(root).node;
+    }
+
+    public subtreeWithAllDeepestClass subtreeWithAllDeepestHelper(TreeNode node) {
+
+        if (node == null) return new subtreeWithAllDeepestClass(0, null);
+
+        subtreeWithAllDeepestClass left = subtreeWithAllDeepestHelper(node.left);
+        subtreeWithAllDeepestClass right = subtreeWithAllDeepestHelper(node.right);
+
+        if (left.height > right.height) {
+            return new subtreeWithAllDeepestClass(left.height + 1, left.node);
+        } else if (right.height > left.height) {
+            return new subtreeWithAllDeepestClass(right.height + 1, right.node);
+        } else {
+            return new subtreeWithAllDeepestClass(left.height, node);
+        }
+    }
+
+    public TreeNode bstFromPreorder(int[] preorder) {
+        return bstFromPreorderHelper(preorder, Integer.MAX_VALUE, new int[]{0});
+    }
+
+    public TreeNode bstFromPreorderHelper(int[] preOrder, int bound, int[] index) {
+        if (index[0] == preOrder.length || preOrder[index[0]] > bound) {
+            return null;
+        }
+
+        TreeNode root = new TreeNode(preOrder[index[0]++]);
+
+        root.left = bstFromPreorderHelper(preOrder, root.val, index);
+        root.right = bstFromPreorderHelper(preOrder, bound, index);
+
+        return root;
+    }
+
+    public long maxMatrixSum(int[][] matrix) {
+
+        int leastElement = Integer.MAX_VALUE;
+        long sum = 0L;
+        int negativeCount = 0;
+
+        for (int[] row : matrix) {
+            for (int value : row) {
+
+                if (value < 0) {
+                    negativeCount++;
+                    value = -value;
+                }
+
+                sum += value;
+
+                if (value < leastElement) {
+                    leastElement = value;
+                }
+            }
+        }
+
+        return (negativeCount % 2 == 0) ? sum : (sum - (long) 2 * leastElement);
+    }
+
     public TreeNode searchBST(TreeNode root, int val) {
 
         if (root == null) return null;

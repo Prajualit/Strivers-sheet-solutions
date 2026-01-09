@@ -1370,6 +1370,54 @@ public class Streaks {
         return result;
     }
 
+    public int repeatedNTimes(int[] nums) {
+        int n = nums.length;
+
+        for (int i = 0; i < n - 2; i++) {
+            if (nums[i] == nums[i + 1] || nums[i] == nums[i + 2]) return nums[i];
+        }
+
+        return nums[n - 1];
+    }
+
+    public int numOfWays(int n) {
+
+        int MOD = 1_000_000_007;
+
+        long a = 6, b = 6;
+
+        for (int i = 2; i <= n; i++) {
+            long A = (3 * a + 2 * b) % MOD;
+            long B = (2 * a + 2 * b) % MOD;
+            a = A;
+            b = B;
+        }
+
+        return (int) (a + b) % MOD;
+    }
+
+    public int sumFourDivisors(int[] nums) {
+
+        int totalSum = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            int currentSum = 0;
+            for (int j = 1; j <= Math.sqrt(nums[i]); j++) {
+                if (nums[i] % j == 0) {
+                    currentSum += i;
+                    if (j != nums[i] / j) {
+                        currentSum += nums[i] / j;
+                    }
+                }
+            }
+            if (currentSum == 4) totalSum += currentSum;
+        }
+
+        return totalSum;
+    }
+
+
+
     public static void main(String[] args) {
 
         System.out.println(Arrays.toString(plusOne(new int[]{1, 2, 3})));
