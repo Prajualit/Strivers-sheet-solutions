@@ -1416,7 +1416,48 @@ public class Streaks {
         return totalSum;
     }
 
+    public long largestSquareArea(int[][] bottomLeft, int[][] topRight) {
 
+        int n = bottomLeft.length;
+
+        long largestArea = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+
+                int minX = Math.max(bottomLeft[i][0], bottomLeft[j][0]);
+                int maxX = Math.min(topRight[i][0], topRight[j][0]);
+                int minY = Math.max(bottomLeft[i][1], bottomLeft[j][1]);
+                int maxY = Math.min(topRight[i][1], topRight[j][1]);
+
+                if (minX < maxX && minY < maxY) {
+
+                    int currentArea = Math.min(maxX - minX, maxY - minY);
+                    largestArea = Math.max(currentArea, largestArea);
+
+                }
+            }
+        }
+
+        return largestArea;
+    }
+
+    public long minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
+
+        int totalCost = 0;
+
+        for (int i = 0; i < source.length(); i++) {
+            if (source.charAt(i) != target.charAt(i)) {
+                for (int j = 0; j < original.length; j++) {
+                    if (original[j] == source.charAt(i) && original[j] == changed[j]) {
+                        totalCost += cost[j];
+                    }
+                }
+            }
+        }
+
+        return totalCost;
+    }
 
     public static void main(String[] args) {
 
