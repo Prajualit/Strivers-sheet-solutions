@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -44,9 +45,65 @@ public class DynamicProgramming {
     }
 
     public static int nonAdjacentSum(List<Integer> nums) {
+        return nonAdjacentSum(nums, 0, new HashMap<>());
+    }
 
+    public static int nonAdjacentSum(List<Integer> nums, int index, HashMap<Integer, Integer> map) {
 
+        if (index >= nums.size()) return 0;
 
+        if (map.containsKey(index)) return map.get(index);
+
+        int result = Math.max(nums.get(index) + nonAdjacentSum(nums, index + 2, map), nonAdjacentSum(nums, index + 1, map));
+        map.put(index, result);
+
+        return result;
+    }
+
+    public static int summingSquares(int n) {
+        return (int) summingSquaresHelper(n);
+    }
+
+    public static double summingSquaresHelper(int n) {
+
+        if (n == 0) return 0;
+
+        double minSquares = Double.POSITIVE_INFINITY;
+
+        for (int i = 0; i <= Math.sqrt(n); i++) {
+            int square = i * i;
+            double numSquares = 1 + summingSquaresHelper(n - square);
+            if (numSquares < minSquares) {
+                minSquares = numSquares;
+            }
+        }
+
+        return minSquares;
+    }
+
+    public static int countingChange(int amount, List<Integer> coins) {
+        return countingChange(amount, coins, 0, new HashMap<>());
+    }
+
+    public static int countingChange(int amount, List<Integer> coins, int coinIndex, HashMap<List<Integer>, Integer> map) {
+
+        if (amount == 0) return 1;
+        if (coinIndex >= coins.size()) return 0;
+
+        List<Integer> list = List.of(amount, coinIndex);
+        if (map.containsKey(list)) return map.get(list);
+
+        int totalWays = 0;
+        int value = coins.get(coinIndex);
+        for (int qty = 0; qty * value <= amount; qty++) {
+            int subAmount = amount - (qty * value);
+            totalWays += countingChange(subAmount, coins, coinIndex + 1, map);
+        }
+
+        int result = totalWays;
+        map.put(list, result);
+
+        return result;
     }
 
     public static void main(String[] args) {

@@ -1451,15 +1451,16 @@ public class Streaks {
                 for (int j = 0; j < original.length; j++) {
                     if (original[j] == source.charAt(i) && original[j] == changed[j]) {
                         totalCost += cost[j];
+                    }
                 }
             }
+
         }
-
         return totalCost;
-    }                    }
+    }
 
 
-public int rob(int[] nums) {
+    public int rob(int[] nums) {
 
         int n = nums.length;
 
@@ -1475,6 +1476,34 @@ public int rob(int[] nums) {
         }
 
         return dp[n - 1];
+    }
+
+    public char nextGreatestLetter(char[] letters, char target) {
+
+        char result = letters[0];
+
+        for (int i = 0; i < letters.length; i++) {
+            if (letters[i] > target) return letters[i];
+        }
+
+        return result;
+    }
+
+    public int minimumCost(int[] nums) {
+
+        int min1 = Integer.MAX_VALUE;
+        int min2 = Integer.MAX_VALUE;
+
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] < min1) {
+                min2 = min1;
+                min1 = nums[i];
+            } else if (nums[i] < min2) {
+                min2 = nums[i];
+            }
+        }
+
+        return nums[0] + min1 + min2;
     }
 
     public static void main(String[] args) {
