@@ -1506,6 +1506,23 @@ public class Streaks {
         return nums[0] + min1 + min2;
     }
 
+    public int uniquePaths(int m, int n) {
+        return uniquePaths(0, 0, m, n, new HashMap<>());
+    }
+
+    public int uniquePaths(int r, int c, int m, int n, HashMap<List<Integer>, Integer> map) {
+
+        if (r == m || c == n) return 0;
+        if (r == m - 1 && c == n - 1) return 1;
+
+        List<Integer> list = List.of(r, c);
+        if (map.containsKey(list)) return map.get(list);
+
+        int result = uniquePaths(r + 1, c, m, n, map) + uniquePaths(r, c + 1, m, n, map);
+        map.put(list, result);
+        return result;
+    }
+
     public static void main(String[] args) {
 
         System.out.println(Arrays.toString(plusOne(new int[]{1, 2, 3})));
