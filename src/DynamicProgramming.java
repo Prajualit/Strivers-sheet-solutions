@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class DynamicProgramming {
 
@@ -104,6 +101,28 @@ public class DynamicProgramming {
         map.put(list, result);
 
         return result;
+    }
+
+    public boolean canPartition(int[] nums) {
+
+        int target = Arrays.stream(nums).sum();
+
+        if (target % 2 == 0) return false;
+
+        target /= 2;
+
+        int n = target + 1;
+        boolean[] isPossible = new boolean[n];
+
+        for (int num : nums) {
+            for (int i = n - 1; i >= 0; i--) {
+                if (isPossible[i] && i + num < n) {
+                    isPossible[i + num] = true;
+                }
+            }
+        }
+
+        return isPossible[target];
     }
 
     public static void main(String[] args) {

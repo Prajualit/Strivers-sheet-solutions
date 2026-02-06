@@ -1523,10 +1523,29 @@ public class Streaks {
         return result;
     }
 
+    public int minRemoval(int[] nums, int k) {
+
+        Arrays.sort(nums);
+
+        int left = 0;
+        int right = 0;
+
+        while (left <= right) {
+            if (nums[right] <= k * nums[left]) {
+                right++;
+            } else {
+                left++;
+            }
+        }
+
+        return right - left;
+    }
+
     public static void main(String[] args) {
 
-        System.out.println(Arrays.toString(plusOne(new int[]{1, 2, 3})));
+//        System.out.println(Arrays.toString(plusOne(new int[]{1, 2, 3})));
 
+        System.out.println(Math.abs(5));
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
 //        int[] nums1 = {4, 2, 3, 4}; // 4
