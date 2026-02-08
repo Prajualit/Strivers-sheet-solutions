@@ -125,6 +125,52 @@ public class DynamicProgramming {
         return isPossible[target];
     }
 
+    public int coinChange(int[] coins, int amount) {
+        int[] memo = new int[amount + 1];
+        Arrays.fill(memo, -2);
+        return coinChange(coins, amount, memo);
+    }
+
+    public int coinChange(int[] coins, int remainder, int[] memo) {
+
+        if (remainder < 0) return -1;
+        if (remainder == 0) return 0;
+
+        int minCount = Integer.MAX_VALUE;
+        for (int coin : coins) {
+
+            int res = coinChange(coins, remainder - coin, memo);
+            if (res >= 0 && res < minCount) {
+                minCount = res + 1;
+            }
+
+        }
+
+        memo[remainder] = (minCount == Integer.MAX_VALUE) ? -1 : minCount;
+
+        return memo[remainder];
+    }
+
+    public int findTargetSumWays(int[] nums, int target) {
+        return findTargetSumWays(nums, target, new HashMap<>());
+    }
+
+    public int findTargetSumWays(int[] nums, int target, HashMap<Integer, Integer> memo) {
+
+        if (target == 0) return 1;
+        if (memo.containsKey(target)) return memo.get(target);
+
+        int totalWays = 0;
+        for (int num : nums) {
+            int result = findTargetSumWays(nums, target - num, memo);
+            totalWays += result;
+        }
+
+        memo.put(target, totalWays);
+
+        return totalWays;
+    }
+
     public static void main(String[] args) {
 
     }
