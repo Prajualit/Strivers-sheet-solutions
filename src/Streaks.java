@@ -1,3 +1,4 @@
+import java.math.BigInteger;
 import java.util.*;
 
 public class Streaks {
@@ -1541,11 +1542,42 @@ public class Streaks {
         return right - left;
     }
 
+    public static int longestBalanced(String s) {
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            map.put(s.charAt(i), map.getOrDefault(s.charAt(i), 0) + 1);
+        }
+
+        int subtract = 0;
+
+        while (!map.containsValue(0)) {
+            for (Map.Entry<Character, Integer> e : map.entrySet()) {
+                e.setValue(e.getValue() - 1);
+            }
+            subtract++;
+        }
+
+        return s.length() - subtract;
+    }
+
+    public String addBinary(String a, String b) {
+
+        BigInteger x = new BigInteger(a, 2);
+        BigInteger y = new BigInteger(b, 2);
+
+        BigInteger sum = x.add(y);
+
+        return sum.toString(2);
+    }
+
     public static void main(String[] args) {
 
 //        System.out.println(Arrays.toString(plusOne(new int[]{1, 2, 3})));
 
-        System.out.println(Math.abs(5));
+        System.out.println(longestBalanced(""));
+
+//        System.out.println(Math.abs(5));
 //
 //        int[] nums = {2, 2, 3, 4}; // 3
 //        int[] nums1 = {4, 2, 3, 4}; // 4
