@@ -1571,11 +1571,62 @@ public class Streaks {
         return sum.toString(2);
     }
 
+    public static int reverseBits(int n) {
+
+        String x = Integer.toBinaryString(n);
+
+        StringBuilder newX = new StringBuilder();
+        for (int i = x.length() - 1; i >= 0; i--) {
+            newX.append(x.charAt(i));
+        }
+
+        BigInteger y = new BigInteger(newX.toString(), 2);
+
+        return Integer.parseInt(y.toString(2));
+    }
+
+    public boolean hasAlternatingBits(int n) {
+
+        String N = Integer.toBinaryString(n);
+
+        for (int i = 1; i < N.length(); i++) {
+            if (N.charAt(i - 1) == N.charAt(i)) return false;
+        }
+
+        return true;
+    }
+
+    public int countPrimeSetBits(int left, int right) {
+
+        int result = 0;
+        for (int i = left; i <= right; i++) {
+            int setBits = Integer.bitCount(i);
+            if (isPrime(setBits)) {
+                result++;
+            }
+        }
+
+        return result;
+    }
+
+    public boolean isPrime(int num) {
+
+        if (num <= 1) return false;
+
+        for (int i = 2; i * i <= num; i++) {
+            if (num % i == 0) return false;
+        }
+
+        return true;
+    }
+
     public static void main(String[] args) {
 
 //        System.out.println(Arrays.toString(plusOne(new int[]{1, 2, 3})));
 
-        System.out.println(longestBalanced(""));
+//        System.out.println(longestBalanced(""));
+
+//        System.out.println(reverseBits(43261596));
 
 //        System.out.println(Math.abs(5));
 //
