@@ -1620,6 +1620,27 @@ public class Streaks {
         return true;
     }
 
+    public int binaryGap(int n) {
+
+        String s = Integer.toBinaryString(n);
+
+
+        int result = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int j = i + 1;
+            if (s.charAt(i) == '1') {
+                while (j < s.length() && s.charAt(j) == '0') {
+                    j++;
+                }
+            }
+            if (j < s.length() && s.charAt(j) == '1') {
+                result = Math.max(j - i, result);
+            }
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
 
 //        System.out.println(Arrays.toString(plusOne(new int[]{1, 2, 3})));
