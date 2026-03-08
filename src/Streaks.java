@@ -1641,7 +1641,23 @@ public class Streaks {
         return result;
     }
 
+    public String findDifferentBinaryString(String[] nums) {
+
+        HashSet<String> set = new HashSet<>(Arrays.asList(nums));
+
+        for (int i = 0; i < nums.length; i++) {
+            BigInteger num1 = new BigInteger(nums[i], 2);
+            for (int j = i; j < nums.length; j++) {
+                BigInteger num2 = new BigInteger(nums[j], 2);
+                if(!set.contains(num1.add(num2).toString())) return num1.add(num2).toString();
+            }
+        }
+
+        return "";
+    }
+
     public static void main(String[] args) {
+
 
 //        System.out.println(Arrays.toString(plusOne(new int[]{1, 2, 3})));
 
