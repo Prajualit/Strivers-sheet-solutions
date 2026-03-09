@@ -1649,11 +1649,45 @@ public class Streaks {
             BigInteger num1 = new BigInteger(nums[i], 2);
             for (int j = i; j < nums.length; j++) {
                 BigInteger num2 = new BigInteger(nums[j], 2);
-                if(!set.contains(num1.add(num2).toString())) return num1.add(num2).toString();
+                if (!set.contains(num1.add(num2).toString())) return num1.add(num2).toString();
             }
         }
 
         return "";
+    }
+
+    public int countBinarySubstrings(String s) {
+
+        int right = s.length() - 1;
+
+        int result = 0;
+
+        for (int left = 0; left < s.length() - 1; left++) {
+
+            int count0 = 0;
+            int count1 = 0;
+
+            for (int i = left; i < right; i++) {
+                int currentCount0 = 0;
+                int currentCount1 = 0;
+                while (s.charAt(i) == '1') {
+                    currentCount0++;
+                    i++;
+                    count0 = Math.max(currentCount0, count0);
+                    if (s.charAt(i) == '0') currentCount0 = 0;
+                }
+                while (s.charAt(i) == '0') {
+                    currentCount1++;
+                    i++;
+                    count1 = Math.max(currentCount1, count1);
+                    if (s.charAt(i) == '1') currentCount1 = 0;
+                }
+            }
+
+            if (count1 == count0) result++;
+        }
+
+        return result;
     }
 
     public static void main(String[] args) {
