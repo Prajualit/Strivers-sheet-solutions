@@ -1727,10 +1727,25 @@ public class Streaks {
         return ans;
     }
 
+    public int bitwiseComplement(int n) {
+
+        if (n == 0) return 1;
+//        BigInteger N = new BigInteger(Integer.toBinaryString(n), 2);
+//
+//        for (int i = 0; i < N.bitLength(); i++) {
+//            N = N.flipBit(i);
+//        }
+//
+//        return Integer.parseInt(N.toString());
+
+        int mask = (1 << (32 - Integer.numberOfLeadingZeros(n))) - 1;
+        return n ^ mask;
+    }
+
     public static void main(String[] args) {
-
-
-        System.out.println(82734 - 11111);
+//
+//        BigInteger N = new BigInteger("101", 2);
+//        System.out.println(N.flipBit(0));
 
 //        System.out.println(Arrays.toString(plusOne(new int[]{1, 2, 3})));
 
