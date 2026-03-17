@@ -1742,7 +1742,50 @@ public class Streaks {
         return n ^ mask;
     }
 
+    public static boolean hasAllCodes(String s, int k) {
+
+        boolean isTrue = false;
+
+        for (int i = 0; i <= k; i++) {
+            isTrue = false;
+            for (int j = 0; j < s.length() - k + 1; j++) {
+                String subStr = s.substring(j, j + k);
+                if ((i ^ Integer.parseInt(subStr)) == 0) {
+                    isTrue = true;
+                    break;
+                }
+            }
+        }
+
+        return isTrue;
+    }
+
+    public int largestSubmatrix(int[][] matrix) {
+
+        int m = matrix.length, n = matrix[0].length;
+        int maxArea = 0;
+        int[] h = new int[n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == 1) h[j]++;
+                else h[j] = 0;
+            }
+            int[] sh = h.clone();
+            Arrays.sort(sh);
+            for (int j = n - 1; j >= 0; j--) {
+                if (sh[j] == 0) break;
+                maxArea = Math.max(maxArea, sh[j] * (n - j));
+            }
+        }
+        return maxArea;
+
+
+    }
+
     public static void main(String[] args) {
+
+        System.out.println(hasAllCodes("0110", 1));
 //
 //        BigInteger N = new BigInteger("101", 2);
 //        System.out.println(N.flipBit(0));
