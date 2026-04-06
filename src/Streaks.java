@@ -1803,6 +1803,109 @@ public class Streaks {
         return dp[n][n];
     }
 
+    public int[][] reverseSubmatrix(int[][] grid, int x, int y, int k) {
+
+        for (int i = y; i <= y + k - 1; i++) {
+            for (int j = 0; j < k / 2; j++) {
+                int temp = grid[x + j][i];
+                grid[x + j][i] = grid[x + k - j - 1][i];
+                grid[x + k - j - 1][i] = temp;
+            }
+        }
+
+        return grid;
+    }
+
+    public boolean canPartitionGrid(int[][] grid) {
+
+        int n = grid[0].length;
+        int m = grid.length;
+
+        for (int r = 0; r < m - 1; r++) {
+            int firstSum = 0;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j <= r; j++) {
+                    firstSum += grid[j][i];
+                }
+            }
+            int secondSum = 0;
+            for (int i = 0; i < n; i++) {
+                for (int j = r + 1; j <= m - 1; j++) {
+                    secondSum += grid[j][i];
+                }
+            }
+            if (firstSum == secondSum) return true;
+        }
+
+        for (int c = 0; c < n - 1; c++) {
+            int firstSum = 0;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j <= c; j++) {
+                    firstSum += grid[j][i];
+                }
+            }
+            int secondSum = 0;
+            for (int i = 0; i < n; i++) {
+                for (int j = c + 1; j <= n - 1; j++) {
+                    secondSum += grid[j][i];
+                }
+            }
+            if (firstSum == secondSum) return true;
+        }
+
+        return false;
+    }
+
+    public boolean judgeCircle(String moves) {
+
+        int[] position = new int[2];
+
+        for (int i = 0; i < moves.length(); i++) {
+            char s = moves.charAt(i);
+            if (s == 'U') position[1]++;
+            else if (s == 'D') position[1]--;
+            else if (s == 'R') position[0]++;
+            else if (s == 'L') position[0]--;
+        }
+
+        return position[0] == 0 && position[1] == 0;
+    }
+
+   
+    public int robotSim(int[] commands, int[][] obstacles) {
+        int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int x = 0, y = 0, direction = 0;
+        int maxDistSq = 0;
+
+        Set<String> obstacleSet = new HashSet<>();
+        for (int[] obs : obstacles) {
+            obstacleSet.add(obs[0] + "," + obs[1]);
+        }
+
+        for (int cmd : commands) {
+            if (cmd == -1) {
+                direction = (direction + 1) % 4;
+            } else if (cmd == -2) {
+                direction = (direction + 3) % 4;
+            } else {
+                for (int i = 0; i < cmd; i++) {
+                    int nextX = x + dirs[direction][0];
+                    int nextY = y + dirs[direction][1];
+
+                    if (!obstacleSet.contains(nextX + "," + nextY)) {
+                        x = nextX;
+                        y = nextY;
+                        maxDistSq = Math.max(maxDistSq, x * x + y * y);
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return maxDistSq;
+    }
+
     public static void main(String[] args) {
 
         System.out.println(hasAllCodes("0110", 1));
